@@ -1,0 +1,56 @@
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  .leftside {
+    display: flex;
+    .avatar {
+      img {
+        width: 3.5rem;
+        border-radius: 50%;
+      }
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    .info {
+      margin-left: 0.8rem;
+      h3 {
+        font-size: 1rem;
+        margin: 0;
+      }
+
+      p {
+        font-size: 0.8rem;
+        color: #34d347;
+        margin: 0;
+      }
+    }
+  }
+
+  .rightside {
+    display: flex;
+
+    div {
+      padding-top: 5px;
+      color: #59a2d9;
+      padding-left: 0.6rem;
+      padding-right: 0.6rem;
+      svg {
+        cursor: pointer;
+      }
+    }
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: -2.5rem;
+    width: calc(100% + 2.5rem);
+    height: 2px;
+    background-color: #eee;
+  }
+}

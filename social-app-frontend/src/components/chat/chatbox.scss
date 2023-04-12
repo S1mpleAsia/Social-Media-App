@@ -1,0 +1,13 @@
+.chatbox {
+  margin-top: 5px;
+  p {
+    display: inline-block;
+    margin: 0;
+    padding: 0.8rem;
+    background-color: #eee;
+    border-top-right-radius: 16px;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+    max-width: 60%;
+  }
+}

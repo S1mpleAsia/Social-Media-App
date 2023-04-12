@@ -1,0 +1,118 @@
+.chatpage {
+  background-color: var(--white-color);
+  display: flex;
+  margin: 0 2rem;
+  padding: 1.5rem 0 0 1.5rem;
+  flex: 1;
+  border-radius: 7px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  .chat-group {
+    position: relative;
+    max-width: 25%;
+    .search {
+      display: flex;
+      align-items: center;
+      padding: 6px 12px;
+      background-color: #f1f2f2;
+      border-radius: 100px;
+      box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+      .search-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .search-bar {
+        width: 90%;
+        input {
+          border-radius: 100px;
+          background-color: #f1f2f2;
+          border: none;
+          outline: none;
+          font-size: 1.1rem;
+          padding: 8px;
+          width: 90%;
+        }
+      }
+    }
+
+    .card-list {
+      margin-top: 1.5rem;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: -1.5rem;
+      background-color: #eeeeee;
+      right: -1.3rem;
+      width: 2px;
+      height: calc(100% + 1.5rem);
+    }
+  }
+
+  .container {
+    margin-left: 2.5rem;
+    padding-left: 1.2rem;
+    flex: 1;
+  }
+
+  .content {
+    padding-top: 1rem;
+    padding-bottom: 0.5rem;
+    height: 100vh;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+  }
+
+  .textbox {
+    --margin-right: 3rem;
+    position: relative;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    margin-right: var(--margin-right);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 12px;
+    background-color: #f1f2f2;
+    border-radius: 100px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+
+    .text-bar {
+      width: 100%;
+
+      input {
+        border-radius: 100px;
+        background-color: #f1f2f2;
+        border: none;
+        outline: none;
+        font-size: 1.1rem;
+        padding: 8px;
+        width: calc(100% - 1rem);
+      }
+    }
+
+    .send-icon {
+      color: var(--blue-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .send-icon:hover {
+      cursor: pointer;
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: -1rem;
+      left: -2.5rem;
+      width: calc(100% + 2.5rem + var(--margin-right));
+      height: 2px;
+      background-color: #eee;
+    }
+  }
+}

@@ -1,0 +1,39 @@
+.message-card {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1rem;
+
+  & > div {
+    display: flex;
+    .avatar {
+      display: inline-block;
+      img {
+        width: 3rem;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+    }
+
+    .wrapper {
+      width: 100%;
+      margin-left: 1rem;
+
+      .info {
+        display: inline-block;
+        .name {
+          font-size: 1rem;
+          font-weight: 700;
+        }
+
+        .time {
+          margin-left: 0.5rem;
+          font-size: 0.7rem;
+          font-weight: 400;
+        }
+      }
+    }
+  }
+
+  .chatbox {
+  }
+}
