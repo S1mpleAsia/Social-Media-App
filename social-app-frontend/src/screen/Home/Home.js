@@ -1,23 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Post from "../../components/post/Post";
 import "./home.scss";
 import { BsPerson, BsEmojiSmile } from "react-icons/bs";
 import { GrLocation } from "react-icons/gr";
 import { IconContext } from "react-icons/lib";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate();
+  const auth = sessionStorage.getItem("username");
+  useEffect(() => {
+    if (!auth) navigate("/login");
+  }, []);
+
   return (
     <div className="homepage">
       <div className="top-bar">
         <div className="status-bar">
           <div>
-            <img
-              src="https://scontent.fhan14-3.fna.fbcdn.net/v/t39.30808-6/340102593_1671418876634272_7202750476793864828_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=EIEUFw6ve7YAX_0vwcV&_nc_ht=scontent.fhan14-3.fna&oh=00_AfANUZqjlQ5lNkefCwL8NTINdAKo5M7L8uSKsoOr2QN3og&oe=6437AE5Fhttps://scontent.fhan14-3.fna.fbcdn.net/v/t39.30808-6/340102593_1671418876634272_7202750476793864828_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=EIEUFw6ve7YAX_0vwcV&_nc_ht=scontent.fhan14-3.fna&oh=00_AfANUZqjlQ5lNkefCwL8NTINdAKo5M7L8uSKsoOr2QN3og&oe=6437AE5F"
-              alt=""
-            />
+            <img src="/images/Ice_Bear.jpg" alt="" />
           </div>
 
-          <textarea placeholder="Whats on your wing, David?"></textarea>
+          <textarea placeholder={`Whats on your wing, ${auth}?`}></textarea>
         </div>
 
         <div className="group-btn">

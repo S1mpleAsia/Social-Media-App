@@ -35,5 +35,68 @@
   }
 
   .chatbox {
+    margin-top: 5px;
+    p {
+      display: inline-block;
+      margin: 0;
+      padding: 0.8rem;
+      background-color: #eee;
+      border-top-right-radius: 16px;
+      border-bottom-left-radius: 16px;
+      border-bottom-right-radius: 16px;
+      max-width: 60%;
+    }
+  }
+}
+
+.message-card.send {
+  flex-direction: row-reverse;
+
+  & > div {
+    width: 100%;
+    flex-direction: row-reverse;
+    .avatar {
+      img {
+      }
+    }
+
+    .wrapper {
+      width: 100%;
+      margin-left: 0;
+      margin-right: 1rem;
+
+      .info {
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: flex-end;
+        .name {
+          font-size: 1rem;
+          font-weight: 700;
+        }
+
+        .time {
+          margin-bottom: 0.15rem;
+          margin-left: 0;
+          margin-right: 0.5rem;
+          font-size: 0.7rem;
+          font-weight: 400;
+        }
+      }
+    }
+  }
+
+  .chatbox {
+    display: flex;
+    flex-direction: row-reverse;
+    width: 100%;
+    margin-top: 5px;
+    p {
+      border-top-right-radius: 0;
+      border-top-left-radius: 16px;
+      border-bottom-left-radius: 16px;
+      border-bottom-right-radius: 16px;
+      background-color: var(--blue-color);
+      color: var(--white-color);
+    }
   }
 }

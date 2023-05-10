@@ -6,8 +6,11 @@ import Notification from "./screen/Notifications/Notification";
 import Layout from "./layout/Layout";
 import Login from "./screen/Login/Login";
 import Saved from "./screen/Saved/Saved";
-import Messages from "./screen/Messages/Messages";
 import MessagesLayout from "./layout/MessagesLayout";
+import Photo from "./components/profile/Photo";
+import Post from "./components/post/Post";
+import About from "./components/profile/About";
+import Friend from "./components/profile/Friend";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +25,27 @@ const router = createBrowserRouter([
       {
         path: "/profile",
         element: <Profile />,
+        children: [
+          {
+            path: "photos",
+            element: <Photo />,
+          },
+
+          {
+            path: "posts",
+            element: <Post />,
+          },
+
+          {
+            path: "about",
+            element: <About />,
+          },
+
+          {
+            path: "friends",
+            element: <Friend />,
+          },
+        ],
       },
 
       {

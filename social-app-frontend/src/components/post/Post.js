@@ -13,10 +13,7 @@ const Post = () => {
       <div className="header">
         <div className="avatar">
           <Link to="profile">
-            <img
-              src="https://scontent.fhan14-3.fna.fbcdn.net/v/t39.30808-6/340102593_1671418876634272_7202750476793864828_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=EIEUFw6ve7YAX_0vwcV&_nc_ht=scontent.fhan14-3.fna&oh=00_AfANUZqjlQ5lNkefCwL8NTINdAKo5M7L8uSKsoOr2QN3og&oe=6437AE5Fhttps://scontent.fhan14-3.fna.fbcdn.net/v/t39.30808-6/340102593_1671418876634272_7202750476793864828_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=EIEUFw6ve7YAX_0vwcV&_nc_ht=scontent.fhan14-3.fna&oh=00_AfANUZqjlQ5lNkefCwL8NTINdAKo5M7L8uSKsoOr2QN3og&oe=6437AE5F"
-              alt=""
-            />
+            <img src="/images/Ice_Bear.jpg" alt="" />
           </Link>
         </div>
 
@@ -74,10 +71,7 @@ const Post = () => {
 
       <div className="cmt-bar">
         <div className="avatar">
-          <img
-            src="https://scontent.fhan14-3.fna.fbcdn.net/v/t39.30808-6/340102593_1671418876634272_7202750476793864828_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=EIEUFw6ve7YAX_0vwcV&_nc_ht=scontent.fhan14-3.fna&oh=00_AfANUZqjlQ5lNkefCwL8NTINdAKo5M7L8uSKsoOr2QN3og&oe=6437AE5Fhttps://scontent.fhan14-3.fna.fbcdn.net/v/t39.30808-6/340102593_1671418876634272_7202750476793864828_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=EIEUFw6ve7YAX_0vwcV&_nc_ht=scontent.fhan14-3.fna&oh=00_AfANUZqjlQ5lNkefCwL8NTINdAKo5M7L8uSKsoOr2QN3og&oe=6437AE5F"
-            alt=""
-          />
+          <img src="/images/Ice_Bear.png" alt="" />
         </div>
 
         <div className="cmt-field">
