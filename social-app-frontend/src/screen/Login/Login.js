@@ -28,6 +28,7 @@ const Login = () => {
       })
       .then(function (res) {
         const data = res.data;
+        console.log(data);
         if (data !== "") {
           sessionStorage.setItem("username", data.username);
           navigate("/");

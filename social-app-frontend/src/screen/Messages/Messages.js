@@ -115,8 +115,7 @@ const Messages = () => {
 
   const onPrivateMessage = (payload) => {
     const payloadData = JSON.parse(payload.body);
-    privateMessage.push(payloadData);
-    setPrivateMessage([...privateMessage]);
+    setPrivateMessage((prevMessage) => [...prevMessage, payloadData]);
   };
 
   const sendPrivateMessage = () => {

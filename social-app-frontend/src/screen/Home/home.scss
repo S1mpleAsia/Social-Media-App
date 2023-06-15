@@ -19,7 +19,9 @@
         align-items: center;
         img {
           width: 3rem;
+          height: 3rem;
           border-radius: 50%;
+          object-fit: cover;
         }
       }
 
@@ -32,6 +34,28 @@
       }
     }
 
+    .image-grid {
+      display: flex;
+      gap: 1rem;
+      margin-left: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+      .image {
+        border-radius: 7px;
+        height: 10rem;
+        width: 16rem;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img {
+          width: 100%;
+          height: auto;
+        }
+      }
+    }
+
     .group-btn {
       display: flex;
       justify-content: space-between;
@@ -40,7 +64,7 @@
       .group-emotion {
         display: flex;
         gap: 1rem;
-        button {
+        label {
           border: none;
           outline: none;
           background-color: var(--white-color);

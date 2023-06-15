@@ -14,7 +14,9 @@
       a {
         img {
           width: 3rem;
+          height: 3rem;
           border-radius: 50%;
+          object-fit: cover;
         }
       }
     }
@@ -63,6 +65,7 @@
     img {
       border-radius: 5px;
       width: 100%;
+      height: 500px;
       object-fit: cover;
     }
   }
@@ -94,6 +97,7 @@
     .avatar {
       img {
         width: 3rem;
+        height: 3rem;
         border-radius: 50%;
         object-fit: cover;
       }
@@ -104,14 +108,20 @@
       position: relative;
       display: flex;
       border-radius: 9999px;
-      textarea {
+      input {
         font-size: 1rem;
         height: 1.5rem;
         border-radius: 9999px;
+        border: 2px solid #d7d9df;
         padding: 0.75rem;
         padding-left: 1rem;
         padding-right: 1rem;
+        outline: none;
         width: 100%;
+
+        &:focus {
+          border: 2px solid var(--black-color);
+        }
       }
 
       button {
@@ -124,6 +134,13 @@
         background-color: var(--white-color);
         color: var(--gray-color);
         cursor: pointer;
+        outline: none;
+
+        label {
+          &:hover {
+            cursor: pointer;
+          }
+        }
       }
     }
   }

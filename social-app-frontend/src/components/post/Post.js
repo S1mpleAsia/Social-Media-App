@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./post.scss";
 import { FiMoreHorizontal } from "react-icons/fi";
 import { AiOutlineHeart } from "react-icons/ai";
@@ -7,19 +7,23 @@ import { IoShareSocialOutline, IoImageOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { IconContext } from "react-icons/lib";
 
-const Post = () => {
+const Post = ({ handleKeyDown, blog, user }) => {
+  useEffect(() => {
+    console.log(blog);
+  }, []);
+
   return (
     <div className="post">
       <div className="header">
         <div className="avatar">
-          <Link to="profile">
-            <img src="/images/Ice_Bear.jpg" alt="" />
+          <Link to="profile/posts">
+            <img src={blog?.user?.imageUrl} alt="" />
           </Link>
         </div>
 
         <div className="status">
           <p className="info">
-            <Link to="/profile">John Due</Link>
+            <Link to="/profile/posts">{blog?.user?.fullname}</Link>
             <span> shared a posts</span>
           </p>
 
@@ -40,44 +44,47 @@ const Post = () => {
       </div>
 
       <div className="caption">
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet officiis
-          animi quos accusamus eaque repellat vero impedit ea earum molestias,
-          ad, optio placeat qui natus porro perferendis odit facere deserunt.
-        </p>
+        <p>{blog?.caption}</p>
       </div>
 
-      <div className="image">
-        <img
-          src="https://images.unsplash.com/photo-1680868354675-34192a9baae7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxOHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
-          alt=""
-        />
-      </div>
+      {blog?.blogImageList.map((image, index) => (
+        <div className="image" key={index}>
+          <img src={image.imageUrl} alt="" />
+        </div>
+      ))}
 
       <div className="group-btn">
         <button>
           <AiOutlineHeart />
-          <span>72</span>
+          <span>{blog?.liked}</span>
         </button>
         <button>
           <BiComment />
-          <span>11</span>
+          <span>{blog?.commented}</span>
         </button>
         <button>
           <IoShareSocialOutline />
-          <span>4</span>
+          <span>{blog?.shared}</span>
         </button>
       </div>
 
       <div className="cmt-bar">
         <div className="avatar">
-          <img src="/images/Ice_Bear.png" alt="" />
+          <img src={user?.imageUrl} alt="" />
         </div>
 
         <div className="cmt-field">
-          <textarea placeholder="Leave a comment"></textarea>
+          <input
+            type="text"
+            placeholder="Leave a comment"
+            onKeyDown={handleKeyDown}
+          ></input>
+
           <button>
-            <IoImageOutline />
+            <label>
+              <input type="file" style={{ display: "none" }} />
+              <IoImageOutline />
+            </label>
           </button>
         </div>
       </div>
