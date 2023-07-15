@@ -27,6 +27,20 @@ const Home = () => {
   });
 
   const [blogList, setBlogList] = useState([]);
+  const [comment, setComment] = useState({
+    content: "",
+    blogId: "",
+    commentImageList: [],
+    commentUser: null,
+  });
+
+  useEffect(() => {
+    console.log(blogList);
+  }, [blogList]);
+
+  useEffect(() => {
+    console.log(comment);
+  }, [comment]);
 
   useEffect(() => {
     if (!auth) navigate("/login");
@@ -35,6 +49,7 @@ const Home = () => {
         try {
           const res = await axios.get("http://localhost:8080/api/v1/blog");
 
+          console.log(res);
           setBlogList([...blogList, ...res.data]);
         } catch (error) {
           console.log(error);
@@ -47,11 +62,8 @@ const Home = () => {
 
   useEffect(() => {
     setBlog({ ...blog, user: userInfo });
+    setComment({ ...comment, commentUser: userInfo });
   }, [userInfo]);
-
-  useEffect(() => {
-    console.log(blogList);
-  }, []);
 
   const connect = () => {
     var socket = new SockJS("http://localhost:8080/ws");
@@ -71,34 +83,70 @@ const Home = () => {
   const onPublicBlog = (payload) => {
     const payloadData = JSON.parse(payload.body);
 
-    setBlogList((prev) => [...prev, payloadData]);
+    setBlogList((prev) => [payloadData, ...prev]);
   };
 
   const onPublicComment = (payload) => {
     const payloadData = JSON.parse(payload.body);
+
+    console.log(payloadData);
+
+    setBlogList((prevBlogList) =>
+      prevBlogList.map((blog) =>
+        blog.id !== payloadData.blogId
+          ? blog
+          : { ...blog, commentList: [...blog.commentList, payloadData] }
+      )
+    );
   };
 
   const postBlog = () => {
+    setBlog({
+      caption: "",
+      liked: 0,
+      commented: 0,
+      shared: 0,
+      blogImageList: [],
+      commentList: [],
+      user: null,
+    });
     const myblog = { ...blog };
 
-    setBlog({ ...blog, blogImageList: [], caption: "" });
+    // setBlog({ ...blog, blogImageList: [], caption: "" });
     stompClient.send("/app/user-blog", {}, JSON.stringify(myblog));
   };
 
-  const postComment = () => {
-    const data = {};
+  const postComment = (blog_id) => {
+    const data = {
+      content: comment.content,
+      blogId: blog_id,
+      commentImageList: comment.commentImageList,
+      commentUser: comment.commentUser,
+    };
 
-    stompClient.send("/app/user-comment", {}, JSON.stringify(blog));
+    console.log(data);
+
+    stompClient.send("/app/user-comment", {}, JSON.stringify(data));
+    setComment({
+      content: "",
+      blogId: "",
+      commentImageList: [],
+      commentUser: comment.commentUser,
+    });
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e, blog_id) => {
     if (e.key === "Enter") {
       console.log("Ok");
-      postComment();
+      setComment((prevComment) => {
+        return { ...prevComment, blogId: blog_id };
+      });
+      // console.log(blog_id);
+      postComment(blog_id);
     }
   };
 
-  function handleFileUpload(file) {
+  function handleFileUpload(file, type, blog_id) {
     console.log(file);
     if (file.type === "image/png" || file.type === "image/jpeg") {
       const formData = new FormData();
@@ -116,13 +164,26 @@ const Home = () => {
             }
           );
 
-          setBlog((prevBlog) => ({
-            ...prevBlog,
-            blogImageList: [
-              ...prevBlog.blogImageList,
-              { imageUrl: "http://localhost:8080/uploads/" + file.name },
-            ],
-          }));
+          if (type == "blog") {
+            console.log("In blog");
+            setBlog((prevBlog) => ({
+              ...prevBlog,
+              blogImageList: [
+                ...prevBlog.blogImageList,
+                { imageUrl: "http://localhost:8080/uploads/" + file.name },
+              ],
+            }));
+          } else if (type == "comment") {
+            console.log("In comment");
+            setComment((prevComment) => ({
+              ...prevComment,
+              blogId: blog_id,
+              commentImageList: [
+                ...prevComment.commentImageList,
+                { imageUrl: "http://localhost:8080/uploads/" + file.name },
+              ],
+            }));
+          }
         } catch (err) {
           console.log(err);
         }
@@ -130,9 +191,10 @@ const Home = () => {
     }
   }
 
-  const handleUploadBlogImg = (e) => {
+  const handleUploadImg = (e, type, blog_id) => {
+    console.log(type);
     if (e.target.files) {
-      [...e.target.files].map((file) => handleFileUpload(file));
+      [...e.target.files].map((file) => handleFileUpload(file, type, blog_id));
     }
   };
 
@@ -188,7 +250,7 @@ const Home = () => {
               <input
                 type="file"
                 style={{ display: "none" }}
-                onChange={handleUploadBlogImg}
+                onChange={(e) => handleUploadImg(e, "blog")}
                 multiple
               />
               <IconContext.Provider value={{ size: "1.5rem" }}>
@@ -208,13 +270,18 @@ const Home = () => {
 
       {blogList?.map((blog, index) => (
         <Post
-          handleKeyDown={handleKeyDown}
+          handleKeyDown={(e) => handleKeyDown(e, blog?.id)}
           blog={blog}
           user={userInfo}
           key={index}
+          comment={comment}
+          setComment={setComment}
+          handleUploadImg={handleUploadImg}
+          blogList={blogList}
+          setBlogList={setBlogList}
+          stompClient={stompClient}
         ></Post>
       ))}
-      <Post handleKeyDown={handleKeyDown}></Post>
     </div>
   );
 };

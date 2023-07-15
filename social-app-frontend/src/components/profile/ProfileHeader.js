@@ -139,7 +139,7 @@ const ProfileHeader = () => {
   return (
     <div className="profile-header">
       <div className="bg">
-        <img src={userInfo.bgUrl} alt="" />
+        <img src={userInfo?.bgUrl} alt="" />
 
         <label>
           <input
@@ -174,8 +174,8 @@ const ProfileHeader = () => {
             activeEditInfo === false ? "" : "display-none"
           }`}
         >
-          <h2>{userInfo.fullname || sessionStorage.getItem("username")}</h2>
-          <p>{userInfo.hometown || "Hanoi, Vietnam"}</p>
+          <h2>{userInfo?.fullname || sessionStorage.getItem("username")}</h2>
+          <p>{userInfo?.status || "Hanoi, Vietnam"}</p>
         </div>
 
         <div
@@ -185,16 +185,16 @@ const ProfileHeader = () => {
         >
           <input
             type="text"
-            value={userInfo.fullname || sessionStorage.getItem("username")}
+            value={userInfo?.fullname}
             onChange={(e) =>
               setUserInfo({ ...userInfo, fullname: e.target.value })
             }
           />
           <input
             type="text"
-            value={userInfo.hometown || "Hanoi, Vietnam"}
+            value={userInfo?.status}
             onChange={(e) =>
-              setUserInfo({ ...userInfo, hometown: e.target.value })
+              setUserInfo({ ...userInfo, status: e.target.value })
             }
           />
         </div>
@@ -229,7 +229,7 @@ const ProfileHeader = () => {
       </div>
 
       <div className="navigator">
-        <Link
+        {/* <Link
           to="./posts"
           className={`${activeName === "posts" ? "active" : ""}`}
           onClick={() => setActiveName("posts")}
@@ -240,7 +240,7 @@ const ProfileHeader = () => {
             </div>
           </IconContext.Provider>
           <span>Posts</span>
-        </Link>
+        </Link> */}
 
         <Link
           to="./about"
@@ -255,7 +255,7 @@ const ProfileHeader = () => {
           <span>About</span>
         </Link>
 
-        <Link
+        {/* <Link
           to="./friends"
           className={`${activeName === "friends" ? "active" : ""}`}
           onClick={() => setActiveName("friends")}
@@ -266,7 +266,7 @@ const ProfileHeader = () => {
             </div>
           </IconContext.Provider>
           <span>Friends</span>
-        </Link>
+        </Link> */}
 
         <Link
           to="./photos"

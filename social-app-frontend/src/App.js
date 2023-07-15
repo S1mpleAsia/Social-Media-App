@@ -11,6 +11,7 @@ import Photo from "./components/profile/Photo";
 import Post from "./components/post/Post";
 import About from "./components/profile/About";
 import Friend from "./components/profile/Friend";
+import Signup from "./screen/Login/Signup";
 
 const router = createBrowserRouter([
   {
@@ -68,6 +69,11 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+
+  {
+    path: "/register",
+    element: <Signup />,
   },
 ]);
 

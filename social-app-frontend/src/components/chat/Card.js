@@ -1,28 +1,52 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./card.scss";
 
-const Card = (props) => {
+const Card = ({
+  key,
+  active,
+  conversation,
+  setConversation,
+  index,
+  info,
+  privateMessage,
+  userInfo,
+  friendList,
+}) => {
+  const [lastMessage, setLastMessage] = useState("");
   const handleCardClick = (e) => {
-    props.setConversation(props.index);
+    setConversation(index);
   };
+
+  useEffect(() => {
+    filterLastMessage();
+  }, [privateMessage]);
+
+  const filterLastMessage = () => {
+    const list = privateMessage.filter(
+      (message) =>
+        (message.fromId === userInfo?.id &&
+          message.toId === friendList[index].id) ||
+        (message.toId === userInfo?.id &&
+          message.fromId === friendList[index].id)
+    );
+
+    if (list.length === 0) setLastMessage("");
+    else setLastMessage(list[list.length - 1].content);
+  };
+
   return (
-    <div className={`card ${props.active}`} onClick={handleCardClick}>
+    <div className={`card ${active}`} onClick={handleCardClick}>
       <div className="avatar">
-        <img src="/images/Ice_Bear.jpg" alt="" />
+        <img src={info?.imageUrl} alt="" />
       </div>
 
       <div className="detail">
         <div className="name">
-          <h3>{props.info.username}</h3>
+          <h3>{info.fullname}</h3>
           <p>4m</p>
         </div>
 
-        <p className="message">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestias
-          mollitia modi perferendis tempore error autem adipisci numquam ea
-          facilis esse exercitationem laborum, quos nemo at fugiat iste iure
-          sequi? Eos.
-        </p>
+        <p className="message">{lastMessage}</p>
       </div>
     </div>
   );

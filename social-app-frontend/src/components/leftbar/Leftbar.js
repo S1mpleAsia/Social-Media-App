@@ -38,7 +38,7 @@ const Leftbar = () => {
           </Link>
 
           <Link
-            to="/profile/posts"
+            to="/profile/about"
             className={`${activeName === "profile" ? "active" : ""}`}
             onClick={() => setActiveName("profile")}
           >
@@ -47,7 +47,7 @@ const Leftbar = () => {
                 <HiOutlineUserGroup />
               </div>
             </IconContext.Provider>
-            <span>Friends</span>
+            <span>Profile</span>
           </Link>
 
           <Link
@@ -64,7 +64,7 @@ const Leftbar = () => {
             <span>Messages</span>
           </Link>
 
-          <Link
+          {/* <Link
             to="/saved"
             className={`${activeName === "saved" ? "active" : ""}`}
             onClick={() => setActiveName("saved")}
@@ -76,7 +76,7 @@ const Leftbar = () => {
             </IconContext.Provider>
 
             <span>Liked posts</span>
-          </Link>
+          </Link> */}
 
           <Link
             to="/notification"

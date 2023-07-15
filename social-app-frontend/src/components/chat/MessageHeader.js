@@ -4,16 +4,16 @@ import { IconContext } from "react-icons/lib";
 import { FiMoreHorizontal } from "react-icons/fi";
 import "./messageHeader.scss";
 
-const MessageHeader = (props) => {
+const MessageHeader = ({ info }) => {
   return (
     <div className="message-header">
       <div className="leftside">
         <div className="avatar">
-          <img src="/images/Ice_Bear.jpg" alt="" />
+          <img src={info?.imageUrl} alt="" />
         </div>
 
         <div className="info">
-          <h3>{props.username}</h3>
+          <h3>{info?.fullname}</h3>
           <p>Online</p>
         </div>
       </div>

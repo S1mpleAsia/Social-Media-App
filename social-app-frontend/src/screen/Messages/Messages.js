@@ -12,7 +12,6 @@ import axios from "axios";
 
 var stompClient = null;
 const Messages = () => {
-  const auth = sessionStorage.getItem("username");
   const messageRef = useRef();
   const bottomRef = useRef(null);
   const [conversation, setConversation] = useState(0);
@@ -20,30 +19,43 @@ const Messages = () => {
   const [privateMessage, setPrivateMessage] = useState([]);
   const [friendList, setFriendList] = useState([]);
   const [userData, setUserData] = useState({
-    senderName: auth,
+    senderName: "",
     receiverName: "",
     connected: false,
     content: "",
   });
 
+  const [userInfo, setUserInfo] = useState(null);
+
+  useEffect(() => {
+    console.log(userInfo);
+  }, [userInfo]);
+
+  useEffect(() => {
+    console.log(friendList);
+  }, [friendList]);
+
   useEffect(() => {
     (async () => {
-      try {
-        const res = await axios.get("http://localhost:8080/api/v1/message");
-        setPrivateMessage([...privateMessage, ...res.data]);
-        console.log("Ok");
-      } catch (err) {
-        console.log(err);
-      }
-    })();
+      const info = await axios.get("http://localhost:8080/api/v1/user", {
+        params: {
+          username: sessionStorage.getItem("username"),
+        },
+      });
 
-    connect();
+      let data = info.data;
+      console.log(data);
+      if (!data.bgUrl) data.bgUrl = "/images/bg.jpg";
 
-    (async () => {
+      if (!data.imageUrl) data.imageUrl = "/images/Ice_Bear.jpg";
+
+      setUserInfo(data);
+      connect(data.fullname);
+
       try {
         const res = await axios.get("http://localhost:8080/api/v1/friends", {
           params: {
-            username: auth,
+            id: info.data.id,
           },
         });
 
@@ -54,6 +66,16 @@ const Messages = () => {
         console.log(error);
       }
     })();
+
+    (async () => {
+      try {
+        const res = await axios.get("http://localhost:8080/api/v1/message");
+        setPrivateMessage([...privateMessage, ...res.data]);
+        console.log("Ok");
+      } catch (err) {
+        console.log(err);
+      }
+    })();
   }, []);
 
   useEffect(() => {
@@ -61,50 +83,23 @@ const Messages = () => {
     bottomRef.current?.lastElementChild?.scrollIntoView();
   }, [groupMessage, privateMessage, conversation]);
 
-  const connect = () => {
+  const connect = (name) => {
     var socket = new SockJS("http://localhost:8080/ws");
     stompClient = over(socket);
-    stompClient.connect({}, onConnected, onError);
+    stompClient.connect({}, () => onConnected(name), onError);
   };
 
-  const onConnected = () => {
+  const onConnected = (name) => {
     setUserData({ ...userData, connected: true });
     stompClient.subscribe("/group/public", onPublicMessage);
     stompClient.subscribe(
       // "/user/David/private",
-      "/user/" + userData.senderName + "/private",
+      "/user/" + name + "/private",
       onPrivateMessage
     );
     // stompClient.subscribe("/group/notify-all", onUserNotify);
 
     // sendUserNotify();
-  };
-
-  const onUserNotify = (payload) => {
-    const payloadData = JSON.parse(payload.body);
-
-    if (payloadData.username === auth) return;
-
-    const friend = friendList.filter(
-      (user) => user.username === payloadData.username
-    );
-
-    if (friend.length === 0) {
-      friendList.push(payloadData);
-      setFriendList([...friendList]);
-    }
-  };
-
-  const sendUserNotify = () => {
-    stompClient.send(
-      "/app/user-notify",
-      {},
-      JSON.stringify({
-        username: auth,
-        password: "1234",
-        image_url: "",
-      })
-    );
   };
 
   const onPublicMessage = (payload) => {
@@ -114,6 +109,7 @@ const Messages = () => {
   };
 
   const onPrivateMessage = (payload) => {
+    console.log("Receive Private message");
     const payloadData = JSON.parse(payload.body);
     setPrivateMessage((prevMessage) => [...prevMessage, payloadData]);
   };
@@ -122,11 +118,15 @@ const Messages = () => {
     if (messageRef.current.value === "") return;
 
     const data = {
-      senderName: auth,
-      receiverName: friendList[conversation].username,
+      senderName: userInfo?.fullname,
+      receiverName: friendList[conversation].fullname,
       content: userData.content,
       date: formatAMPM(new Date()),
+      fromId: userInfo?.id,
+      toId: friendList[conversation].id,
     };
+
+    console.log(data);
 
     stompClient.send("/app/private-message", {}, JSON.stringify(data));
 
@@ -149,7 +149,7 @@ const Messages = () => {
       "/app/public-message",
       {},
       JSON.stringify({
-        senderName: auth,
+        senderName: userInfo?.fullname,
         receiverName: "Group",
         content: userData.content,
         date: formatAMPM(new Date()),
@@ -185,10 +185,10 @@ const Messages = () => {
   }
 
   function separateMessage(msg) {
-    if (msg.senderName === auth)
-      return msg.receiverName === friendList[conversation]?.username;
-    else if (msg.senderName === friendList[conversation]?.username)
-      return msg.receiverName === auth;
+    if (msg.senderName === userInfo?.fullname)
+      return msg.receiverName === friendList[conversation]?.fullname;
+    else if (msg.senderName === friendList[conversation]?.fullname)
+      return msg.receiverName === userInfo?.fullname;
   }
 
   return (
@@ -214,15 +214,16 @@ const Messages = () => {
               setConversation={setConversation}
               index={index}
               info={item}
+              privateMessage={privateMessage}
+              userInfo={userInfo}
+              friendList={friendList}
             ></Card>
           ))}
         </div>
       </div>
 
       <div className="container">
-        <MessageHeader
-          username={friendList[conversation]?.username}
-        ></MessageHeader>
+        <MessageHeader info={friendList[conversation]}></MessageHeader>
 
         <div className="content" ref={bottomRef}>
           {privateMessage
@@ -230,7 +231,9 @@ const Messages = () => {
             .map((item, index) => (
               <MessageCard
                 msg={item}
-                fromself={auth === item.senderName ? "send" : "received"}
+                fromself={
+                  userInfo?.fullname === item.senderName ? "send" : "received"
+                }
                 key={index}
               ></MessageCard>
             ))}

@@ -5,7 +5,7 @@ import axios from "axios";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [signUpMode, setSignUpMode] = useState(false);
 
@@ -22,7 +22,7 @@ const Login = () => {
     axios
       .get("http://localhost:8080/api/v1/login", {
         params: {
-          username: username,
+          email: email,
           password: password,
         },
       })
@@ -43,7 +43,47 @@ const Login = () => {
   };
 
   return (
-    <div className={`login-container ${signUpMode ? "sign-up-mode" : ""}`}>
+    <div className="auth-app">
+      <form onSubmit={handleLogin}>
+        <h1>Login</h1>
+
+        <div className="formInput">
+          <label>Email</label>
+          <input
+            value={email}
+            type="email"
+            id="email"
+            placeholder="Your email"
+            name="email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+
+        <div className="formInput">
+          <label>Password</label>
+          <input
+            value={password}
+            type="password"
+            id="password"
+            placeholder="Your password"
+            name="password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+
+        <button>Login</button>
+
+        <div
+          className="link-btn"
+          onClick={() => {
+            navigate("/register");
+          }}
+        >
+          Don't have an account
+        </div>
+      </form>
+
+      {/* <div className={`login-container ${signUpMode ? "sign-up-mode" : ""}`}>
       <div className="forms-container">
         <div className="signin-signup">
           <form action="" className="sign-in-form">
@@ -162,6 +202,7 @@ const Login = () => {
           <img src="./register.svg" className="image" alt="" />
         </div>
       </div>
+    </div> */}
     </div>
   );
 };
