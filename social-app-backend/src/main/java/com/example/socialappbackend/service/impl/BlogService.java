@@ -2,6 +2,7 @@ package com.example.socialappbackend.service.impl;
 
 import com.example.socialappbackend.converter.BlogConverter;
 import com.example.socialappbackend.dto.BlogDTO;
+import com.example.socialappbackend.dto.request.BlogRequest;
 import com.example.socialappbackend.entity.BlogEntity;
 import com.example.socialappbackend.entity.BlogImageEntity;
 import com.example.socialappbackend.entity.UserEntity;
@@ -17,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BlogService implements IBlogService {
@@ -30,7 +32,7 @@ public class BlogService implements IBlogService {
 
     @Override
     public List<BlogDTO> findAll() {
-        List<BlogEntity> blogEntityList = blogRepository.findAllByOrderByIdAsc();
+        List<BlogEntity> blogEntityList = blogRepository.findAllByOrderByIdDesc();
 
         List<BlogDTO> blogDTOS = blogEntityList.stream().map(blogEntity -> blogConverter.toDto(blogEntity)).toList();
 
@@ -50,17 +52,27 @@ public class BlogService implements IBlogService {
     }
 
     @Override
-    public BlogDTO saveBlog(BlogDTO blogDTO) {
-        BlogEntity blogEntity = blogConverter.toEntity(blogDTO);
+    public BlogDTO saveBlog(BlogRequest blogRequest) {
+        BlogEntity blogEntity = blogConverter.toEntity(blogRequest);
         List<BlogImageEntity> imageList = blogEntity.getBlogImageList();
 
-        BlogDTO myBlog = blogConverter.toDto(blogRepository.save(blogEntity));
+        blogRepository.save(blogEntity);
 
         if(!imageList.isEmpty()) {
             blogImageRepository.saveAll(imageList);
         }
 
-        return myBlog;
+        return blogConverter.toDto(blogRequest);
+    }
+
+    @Override
+    public void delete(Integer id) {
+        Optional<BlogEntity> blogEntity = blogRepository.findById(id);
+
+        blogEntity.ifPresent(entity -> blogRepository.delete(entity));
+
+
+//        blogRepository.de
     }
 
 

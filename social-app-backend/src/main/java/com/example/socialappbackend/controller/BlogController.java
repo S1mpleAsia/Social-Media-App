@@ -1,6 +1,7 @@
 package com.example.socialappbackend.controller;
 
 import com.example.socialappbackend.dto.BlogDTO;
+import com.example.socialappbackend.dto.request.BlogRequest;
 import com.example.socialappbackend.service.IBlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -34,5 +35,10 @@ public class BlogController {
     @PostMapping("/blog")
     public BlogDTO saveBlog(@RequestBody BlogDTO blogDTO) {
         return blogDTO;
+    }
+
+    @DeleteMapping("/blog/{id}")
+    public void deleteBlog(@PathVariable Integer id) {
+        blogService.delete(id);
     }
 }

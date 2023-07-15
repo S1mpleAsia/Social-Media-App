@@ -1,7 +1,9 @@
 package com.example.socialappbackend.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -27,16 +29,16 @@ public class BlogEntity {
     @Column
     private Integer shared;
 
-    @OneToMany(mappedBy = "blogWithImage")
-    @JsonManagedReference
+    @OneToMany(mappedBy = "blogWithImage", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "blog-image")
     private List<BlogImageEntity> blogImageList;
 
-    @OneToMany(mappedBy = "blogWithComment")
-    @JsonManagedReference
+    @OneToMany(mappedBy = "blogWithComment", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "blog-comment")
     private List<CommentEntity> commentList;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonBackReference
+    @JsonManagedReference(value = "user-blog")
     private UserEntity user;
 }

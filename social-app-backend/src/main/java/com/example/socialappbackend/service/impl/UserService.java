@@ -2,6 +2,7 @@ package com.example.socialappbackend.service.impl;
 
 import com.example.socialappbackend.converter.UserConverter;
 import com.example.socialappbackend.dto.UserDTO;
+import com.example.socialappbackend.dto.request.UserRequest;
 import com.example.socialappbackend.entity.AccountEntity;
 import com.example.socialappbackend.entity.UserEntity;
 import com.example.socialappbackend.repository.AccountRepository;
@@ -19,6 +20,7 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 
 @Service
@@ -106,15 +108,22 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserDTO update(UserDTO userDTO) {
-        UserEntity entity = userConverter.toEntity(userDTO);
+    public UserDTO update(UserRequest userRequest) {
+        UserEntity entity = userConverter.toEntity(userRequest);
 
 
-        AccountEntity account = accountRepository.findFirstById(userDTO.getAccount().getId());
+        AccountEntity account = accountRepository.findFirstById(userRequest.getAccount().getId());
         entity.setAccount(account);
 
         userRepository.save(entity);
 
         return userConverter.toDto(entity);
+    }
+
+    @Override
+    public List<UserDTO> getFriendList(Integer id) {
+        List<UserEntity> entityList = userRepository.getFriendList(id);
+
+        return entityList.stream().map(userEntity -> userConverter.toDto(userEntity)).toList();
     }
 }

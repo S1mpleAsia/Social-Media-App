@@ -4,8 +4,11 @@ import com.example.socialappbackend.converter.UserConverter;
 import com.example.socialappbackend.dto.BlogDTO;
 import com.example.socialappbackend.dto.CommentDTO;
 import com.example.socialappbackend.dto.MessageDTO;
+import com.example.socialappbackend.dto.request.BlogRequest;
+import com.example.socialappbackend.dto.request.CommentRequest;
 import com.example.socialappbackend.repository.UserRepository;
 import com.example.socialappbackend.service.IBlogService;
+import com.example.socialappbackend.service.ICommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -19,6 +22,8 @@ public class ChatController {
     private SimpMessagingTemplate simpMessagingTemplate;
     @Autowired
     private IBlogService blogService;
+    @Autowired
+    private ICommentService commentService;
 
 //    @Autowired
 //    public ChatController(SimpMessagingTemplate simpMessagingTemplate) {
@@ -45,14 +50,15 @@ public class ChatController {
 
     @MessageMapping("/user-blog")   //  /app/user-blog
     @SendTo("/group/public-blog")
-    public BlogDTO receiveUserBlog(@Payload BlogDTO blogDTO) {
-        return blogService.saveBlog(blogDTO);
+    public BlogDTO receiveUserBlog(@Payload BlogRequest blogRequest) {
+        return blogService.saveBlog(blogRequest);
     }
 
     @MessageMapping("/user-comment")    //  /app/user-comment
     @SendTo("/group/public-comment")
-    public CommentDTO receiveUserComment(@Payload CommentDTO commentDTO) {
-        return commentDTO;
+    public CommentDTO receiveUserComment(@Payload CommentRequest commentRequest) {
+        System.out.println(commentRequest);
+        return commentService.saveComment(commentRequest);
     }
 
     @MessageMapping("/private-message")     //  /app/private-message

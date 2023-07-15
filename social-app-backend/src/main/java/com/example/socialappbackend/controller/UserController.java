@@ -1,10 +1,13 @@
 package com.example.socialappbackend.controller;
 
 import com.example.socialappbackend.dto.UserDTO;
+import com.example.socialappbackend.dto.request.UserRequest;
 import com.example.socialappbackend.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 
 @RestController
@@ -42,8 +45,13 @@ public class UserController {
     }
 
     @PutMapping(value = "/user")
-    public UserDTO updateUser(@RequestBody UserDTO userDTO) {
-        return userService.update(userDTO);
+    public UserDTO updateUser(@RequestBody UserRequest userRequest) {
+        return userService.update(userRequest);
+    }
+
+    @GetMapping(value = "/friends")
+    public List<UserDTO> getFriendList(@RequestParam("id") Integer id) {
+        return userService.getFriendList(id);
     }
 }
 

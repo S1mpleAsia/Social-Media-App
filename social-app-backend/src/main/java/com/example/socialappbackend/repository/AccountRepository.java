@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface AccountRepository extends JpaRepository<AccountEntity, Integer> {
-    AccountEntity findByUsernameAndPassword(String username, String password);
+    AccountEntity findByEmailAndPassword(String email, String password);
 
     AccountEntity findByUsername(String username);
     AccountEntity findFirstById(Integer id);

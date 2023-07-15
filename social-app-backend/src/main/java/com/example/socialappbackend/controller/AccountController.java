@@ -1,8 +1,10 @@
 package com.example.socialappbackend.controller;
 
 import com.example.socialappbackend.dto.AccountDTO;
+import com.example.socialappbackend.dto.request.AccountRequest;
 import com.example.socialappbackend.service.IAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,12 +17,18 @@ public class AccountController {
     private IAccountService accountService;
 
     @GetMapping(value = "/login")
-    public AccountDTO getUser(@RequestParam("username") String username, @RequestParam("password") String password) {
-        return accountService.getUser(username, password);
+    public AccountDTO getUser(@RequestParam("email") String email, @RequestParam("password") String password) {
+        return accountService.getUser(email, password);
     }
 
-    @GetMapping(value = "/friends")
-    public List<AccountDTO> getFriendsList(@RequestParam("username") String username) {
-        return accountService.getFriendList(username);
+    @PostMapping(value = "/register")
+    @ResponseStatus(HttpStatus.OK)
+    public AccountDTO saveAccount(@RequestBody AccountRequest accountRequest) {
+        return accountService.saveAccount(accountRequest);
     }
+
+//    @GetMapping(value = "/friends")
+//    public List<AccountDTO> getFriendsList(@RequestParam("username") String username) {
+//        return accountService.getFriendList(username);
+//    }
 }

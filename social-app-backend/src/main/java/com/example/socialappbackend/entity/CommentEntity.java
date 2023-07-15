@@ -1,7 +1,9 @@
 package com.example.socialappbackend.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -23,10 +25,15 @@ public class CommentEntity {
 
     @ManyToOne
     @JoinColumn(name = "blog_id")
-    @JsonBackReference
+    @JsonBackReference(value = "blog-comment")
     private BlogEntity blogWithComment;
 
-    @OneToMany(mappedBy = "comment")
-    @JsonManagedReference
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "comment-image")
     private List<CommentImageEntity> commentImageList;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonManagedReference(value = "user-comment")
+    private UserEntity commentUser;
 }

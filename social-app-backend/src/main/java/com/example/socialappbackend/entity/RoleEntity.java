@@ -1,9 +1,12 @@
 package com.example.socialappbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name = "role")
@@ -14,8 +17,9 @@ public class RoleEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-    @OneToOne(mappedBy = "role")
-    private AccountEntity account;
+    @OneToMany(mappedBy = "role")
+    @JsonManagedReference
+    private List<AccountEntity> account;
     @Column(name = "role_name")
     private String roleName;
     @Column

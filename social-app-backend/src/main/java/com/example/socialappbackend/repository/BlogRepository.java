@@ -8,4 +8,6 @@ import java.util.List;
 @Repository
 public interface BlogRepository extends JpaRepository<BlogEntity, Integer> {
     List<BlogEntity> findAllByOrderByIdAsc();
+
+    List<BlogEntity> findAllByOrderByIdDesc();
 }

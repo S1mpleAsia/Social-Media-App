@@ -1,7 +1,6 @@
 package com.example.socialappbackend.dto;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +15,6 @@ public class AccountDTO {
     private String email;
     private Date createdAt;
     private String refreshToken;
-    @JsonBackReference
+    @JsonBackReference(value = "user-account-dto")
     private UserDTO user;
 }

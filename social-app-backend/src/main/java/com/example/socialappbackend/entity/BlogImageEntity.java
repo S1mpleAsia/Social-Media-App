@@ -20,6 +20,6 @@ public class BlogImageEntity {
 
     @ManyToOne
     @JoinColumn(name = "blog_id")
-    @JsonBackReference
+    @JsonBackReference(value = "blog-image")
     private BlogEntity blogWithImage;
 }

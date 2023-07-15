@@ -20,6 +20,6 @@ public class CommentImageEntity {
 
     @ManyToOne
     @JoinColumn(name = "comment_id")
-    @JsonBackReference
+    @JsonBackReference(value = "comment-image")
     private CommentEntity comment;
 }

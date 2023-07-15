@@ -23,8 +23,8 @@ public class MessageService implements IMessageService {
 
     @Override
     public MessageEntity save(MessageDTO messageDTO) {
-        Integer fromId = accountService.getUser(messageDTO.getSenderName()).getId();
-        Integer toId = accountService.getUser(messageDTO.getReceiverName()).getId();
+        Integer fromId = messageDTO.getFromId();
+        Integer toId = messageDTO.getToId();
 
         MessageEntity entity = messageConverter.toEntity(messageDTO);
 

@@ -29,12 +29,13 @@ public class AccountEntity {
     @Column
     private String refreshToken;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "role_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    @JsonBackReference
     private RoleEntity role;
 
     @OneToOne(mappedBy = "account")
-    @JsonBackReference
+    @JsonBackReference(value = "user-account")
     private UserEntity user;
 
     @OneToMany(mappedBy = "fromAccount")

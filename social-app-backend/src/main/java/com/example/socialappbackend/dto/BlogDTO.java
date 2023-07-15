@@ -1,7 +1,6 @@
 package com.example.socialappbackend.dto;
 
 import com.fasterxml.jackson.annotation.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,15 +9,16 @@ import java.util.List;
 
 @Getter
 @Setter
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class BlogDTO {
     private Integer id;
     private String caption;
     private Integer liked;
     private Integer commented;
     private Integer shared;
-    @JsonManagedReference
+    @JsonManagedReference(value = "blog-image-dto")
     private List<BlogImageDTO> blogImageList;
+    @JsonManagedReference(value = "blog-comment-dto")
     private List<CommentDTO> commentList;
+    @JsonManagedReference(value = "user-blog-dto")
     private UserDTO user;
 }

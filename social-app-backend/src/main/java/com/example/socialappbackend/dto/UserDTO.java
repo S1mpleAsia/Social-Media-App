@@ -1,8 +1,7 @@
 package com.example.socialappbackend.dto;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
+import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +10,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class UserDTO {
     private Integer id;
     private String imageUrl;
@@ -20,6 +18,12 @@ public class UserDTO {
     private String fullname;
     private String studiedAt;
     private String hometown;
+    private String currentEducation;
+    private String status;
+    @JsonManagedReference(value = "user-account-dto")
     private AccountDTO account;
+    @JsonBackReference(value = "user-blog-dto")
     private List<BlogDTO> blogList;
+    @JsonBackReference(value = "user-comment-dto")
+    private List<CommentDTO> commentList;
 }

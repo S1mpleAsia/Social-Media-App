@@ -1,6 +1,7 @@
 package com.example.socialappbackend.converter;
 
 import com.example.socialappbackend.dto.AccountDTO;
+import com.example.socialappbackend.dto.request.AccountRequest;
 import com.example.socialappbackend.entity.AccountEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,5 +22,11 @@ public class AccountConverter {
         if(accountDTO == null) return null;
 
         return modelMapper.map(accountDTO, AccountEntity.class);
+    }
+
+    public AccountEntity toEntity(AccountRequest accountRequest) {
+        if(accountRequest == null) return null;
+
+        return modelMapper.map(accountRequest, AccountEntity.class);
     }
 }

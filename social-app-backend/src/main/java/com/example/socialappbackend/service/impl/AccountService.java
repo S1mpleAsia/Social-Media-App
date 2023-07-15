@@ -2,11 +2,18 @@ package com.example.socialappbackend.service.impl;
 
 import com.example.socialappbackend.converter.AccountConverter;
 import com.example.socialappbackend.dto.AccountDTO;
+import com.example.socialappbackend.dto.request.AccountRequest;
 import com.example.socialappbackend.entity.AccountEntity;
+import com.example.socialappbackend.entity.RoleEntity;
+import com.example.socialappbackend.entity.UserEntity;
 import com.example.socialappbackend.repository.AccountRepository;
+import com.example.socialappbackend.repository.RoleRepository;
+import com.example.socialappbackend.repository.UserRepository;
 import com.example.socialappbackend.service.IAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -14,9 +21,12 @@ import java.util.List;
 public class AccountService implements IAccountService {
     @Autowired
     private AccountRepository accountRepository;
-
     @Autowired
     private AccountConverter accountConverter;
+    @Autowired
+    private RoleRepository roleRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public List<AccountDTO> getFriendList(String username) {
@@ -26,8 +36,8 @@ public class AccountService implements IAccountService {
     }
 
     @Override
-    public AccountDTO getUser(String username, String password) {
-        AccountEntity entity = accountRepository.findByUsernameAndPassword(username, password);
+    public AccountDTO getUser(String email, String password) {
+        AccountEntity entity = accountRepository.findByEmailAndPassword(email, password);
 
         if(entity == null) return null;
 
@@ -46,5 +56,32 @@ public class AccountService implements IAccountService {
     @Override
     public AccountEntity findById(Integer id) {
         return accountRepository.findFirstById(id);
+    }
+
+    @Override
+    public AccountDTO saveAccount(AccountRequest accountRequest) {
+        AccountEntity entity = accountConverter.toEntity(accountRequest);
+
+        if(checkExist(entity)) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User already exist");
+
+        RoleEntity roleEntity = roleRepository.findFirstById(accountRequest.getRole().getId());
+        entity.setRole(roleEntity);
+        UserEntity user = entity.getUser();
+        user.setDefaultValue();
+
+        entity.setUser(null);
+
+        AccountEntity myEntity = accountRepository.saveAndFlush(entity);
+
+        user.setAccount(myEntity);
+        userRepository.save(user);
+
+        return accountConverter.toDto(myEntity);
+    }
+
+    private boolean checkExist(AccountEntity account) {
+        AccountEntity accountEntity = accountRepository.findByUsername(account.getUsername());
+
+        return accountEntity != null;
     }
 }

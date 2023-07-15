@@ -14,7 +14,12 @@ public class MessageConverter {
     public MessageDTO toDto(MessageEntity entity) {
         if(entity == null) return null;
 
-        return modelMapper.map(entity, MessageDTO.class);
+        MessageDTO messageDTO = modelMapper.map(entity, MessageDTO.class);
+        messageDTO.setFromId(entity.getFromAccount().getId());
+        messageDTO.setToId(entity.getToAccount().getId());
+
+        return messageDTO;
+
     }
 
     public MessageEntity toEntity(MessageDTO messageDTO) {
