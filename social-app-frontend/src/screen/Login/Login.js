@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./login.scss";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { notification } from "antd";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -32,6 +33,13 @@ const Login = () => {
         if (data !== "") {
           sessionStorage.setItem("username", data.username);
           navigate("/");
+        } else {
+          notification.error({
+            message: "Login Failed!",
+            description: "Username or Password incorrect",
+            placement: "top",
+            duration: 1,
+          });
         }
       })
       .catch(function (err) {

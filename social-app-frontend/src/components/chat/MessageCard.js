@@ -17,6 +17,16 @@ const MessageCard = (props) => {
           <div className="chatbox">
             <p>{props.msg.content}</p>
           </div>
+
+          {props?.msg?.imageUrl ? (
+            <div className={`image-wrapper ${props.fromself}`}>
+              <div className="image">
+                <img src={props?.msg?.imageUrl} alt="" />
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </div>

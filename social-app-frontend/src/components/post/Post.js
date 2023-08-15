@@ -11,6 +11,7 @@ import Popover from "../popover/Popover";
 import Swal from "sweetalert2";
 import EditModal from "./EditModal";
 import axios from "axios";
+import { notification } from "antd";
 
 const Post = ({
   handleKeyDown,
@@ -29,6 +30,7 @@ const Post = ({
 
   useEffect(() => {
     console.log(blog);
+    console.log(user);
   }, []);
 
   useEffect(() => {
@@ -40,7 +42,17 @@ const Post = ({
     console.log("ImageURL " + image_url);
   };
 
-  const handleRemovePost = (blog_id) => {
+  const handleRemovePost = (blog_id, blog) => {
+    if (user.id !== blog.user.id) {
+      notification.error({
+        message: "Remove fail",
+        description: "You don't have permission to delete this post",
+        placement: "top",
+        duration: 1,
+      });
+
+      return;
+    }
     setPopActive(!popActive);
     console.log(blog_id);
 
@@ -107,6 +119,7 @@ const Post = ({
             isModalOpen={isModalOpen}
             setIsModalOpen={setIsModalOpen}
             blog={blog}
+            user={user}
           ></Popover>
 
           <EditModal

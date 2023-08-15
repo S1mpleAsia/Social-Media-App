@@ -82,6 +82,7 @@ const EditModal = ({
   }
 
   const handleUploadImg = (e, type, blog_id) => {
+    console.log(e.target.files);
     if (e.target.files) {
       [...e.target.files].map((file) => handleFileUpload(file, type, blog_id));
     }

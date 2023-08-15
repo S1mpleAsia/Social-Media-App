@@ -91,14 +91,20 @@ const Leftbar = () => {
             <span>Notifications</span>
           </Link>
 
-          <a href="#">
+          <Link
+            to="/login"
+            onClick={() => {
+              sessionStorage.clear();
+              setActiveName("");
+            }}
+          >
             <IconContext.Provider value={{ size: "1.6rem" }}>
               <div>
                 <BiLogOut />
               </div>
             </IconContext.Provider>
             <span>Logout</span>
-          </a>
+          </Link>
         </div>
       </div>
     </div>

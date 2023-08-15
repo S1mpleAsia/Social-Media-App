@@ -3,7 +3,8 @@ import "./messages.scss";
 import Card from "../../components/chat/Card";
 import MessageCard from "../../components/chat/MessageCard";
 import { BiSearch } from "react-icons/bi";
-import { IoMdSend } from "react-icons/io";
+import { IoMdCloseCircle, IoMdSend } from "react-icons/io";
+import { MdOutlinePhotoLibrary } from "react-icons/md";
 import { IconContext } from "react-icons/lib";
 import MessageHeader from "../../components/chat/MessageHeader";
 import SockJS from "sockjs-client";
@@ -24,6 +25,9 @@ const Messages = () => {
     connected: false,
     content: "",
   });
+
+  const [file, setFile] = useState(null);
+  const fileRef = useRef();
 
   const [userInfo, setUserInfo] = useState(null);
 
@@ -114,7 +118,7 @@ const Messages = () => {
     setPrivateMessage((prevMessage) => [...prevMessage, payloadData]);
   };
 
-  const sendPrivateMessage = () => {
+  const sendPrivateMessage = async () => {
     if (messageRef.current.value === "") return;
 
     const data = {
@@ -124,23 +128,44 @@ const Messages = () => {
       date: formatAMPM(new Date()),
       fromId: userInfo?.id,
       toId: friendList[conversation].id,
+      imageUrl:
+        file == null ? null : "http://localhost:8080/uploads/" + file?.name,
     };
 
-    console.log(data);
+    try {
+      const res = await axios.post(
+        "http://localhost:8080/api/v1/message",
+        data
+      );
+
+      console.log(res);
+
+      const formData = new FormData();
+
+      if (file != null) {
+        formData.set("file", file);
+        formData.set("id", res.data.id);
+
+        const result = await axios.post(
+          "http://localhost:8080/api/v1/message/upload",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        setFile(null);
+        fileRef.current.value = null;
+      } else {
+        console.log("File null");
+      }
+    } catch (error) {
+      console.log(error);
+    }
 
     stompClient.send("/app/private-message", {}, JSON.stringify(data));
-
-    (async () => {
-      try {
-        const res = await axios.post(
-          "http://localhost:8080/api/v1/message",
-          data
-        );
-        console.log(res);
-      } catch (error) {
-        console.log(error);
-      }
-    })();
   };
 
   const sendPublicMessage = () => {
@@ -171,6 +196,22 @@ const Messages = () => {
       // sendPublicMessage();
       sendPrivateMessage();
     }
+  };
+
+  const handleMessageImg = (e) => {
+    if (e.target.files) {
+      if (
+        e.target.files[0]?.type === "image/png" ||
+        e.target.files[0]?.type === "image/jpeg"
+      ) {
+        setFile(e.target.files[0]);
+      }
+    }
+  };
+
+  const removeImg = (e) => {
+    setFile(null);
+    fileRef.current.value = null;
   };
 
   function formatAMPM(date) {
@@ -251,6 +292,22 @@ const Messages = () => {
               }}
               onKeyDown={handleKeyDown}
             />
+
+            <div className="photo-wrapper">
+              <label>
+                <input
+                  type="file"
+                  style={{ display: "none" }}
+                  onChange={(e) => handleMessageImg(e)}
+                  ref={fileRef}
+                />
+                <IconContext.Provider
+                  value={{ size: "1.5rem", color: "#218dfa" }}
+                >
+                  <MdOutlinePhotoLibrary />
+                </IconContext.Provider>
+              </label>
+            </div>
           </div>
 
           <IconContext.Provider value={{ size: "1.5rem" }}>
@@ -258,6 +315,21 @@ const Messages = () => {
               <IoMdSend />
             </div>
           </IconContext.Provider>
+
+          {file ? (
+            <div className="preview-image">
+              <div className="remove-img" onClick={removeImg}>
+                <IconContext.Provider
+                  value={{ size: "1.5rem", color: "rgb(49, 51, 56, 0.9)" }}
+                >
+                  <IoMdCloseCircle />
+                </IconContext.Provider>
+              </div>
+              <img src={URL.createObjectURL(file)} alt="" />
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </div>
