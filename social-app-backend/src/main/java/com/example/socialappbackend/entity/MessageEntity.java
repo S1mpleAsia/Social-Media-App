@@ -34,4 +34,6 @@ public class MessageEntity {
     private String content;
     @Column
     private String date;
+    @Column
+    private String imageUrl;
 }

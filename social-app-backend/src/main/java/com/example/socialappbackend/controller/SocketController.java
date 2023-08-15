@@ -1,12 +1,10 @@
 package com.example.socialappbackend.controller;
 
-import com.example.socialappbackend.converter.UserConverter;
 import com.example.socialappbackend.dto.BlogDTO;
 import com.example.socialappbackend.dto.CommentDTO;
 import com.example.socialappbackend.dto.MessageDTO;
 import com.example.socialappbackend.dto.request.BlogRequest;
 import com.example.socialappbackend.dto.request.CommentRequest;
-import com.example.socialappbackend.repository.UserRepository;
 import com.example.socialappbackend.service.IBlogService;
 import com.example.socialappbackend.service.ICommentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +15,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class ChatController {
+public class SocketController {
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
     @Autowired

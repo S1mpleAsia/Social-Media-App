@@ -19,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BlogService implements IBlogService {
@@ -56,13 +57,15 @@ public class BlogService implements IBlogService {
         BlogEntity blogEntity = blogConverter.toEntity(blogRequest);
         List<BlogImageEntity> imageList = blogEntity.getBlogImageList();
 
-        blogRepository.save(blogEntity);
+        blogRepository.saveAndFlush(blogEntity);
 
-        if(!imageList.isEmpty()) {
-            blogImageRepository.saveAll(imageList);
-        }
+//        List<BlogImageEntity> unsavedImageList = imageList.stream().filter(item -> item.getId() == null).toList();
+//
+//        if(!unsavedImageList.isEmpty()) {
+//            blogImageRepository.saveAll(unsavedImageList);
+//        }
 
-        return blogConverter.toDto(blogRequest);
+        return blogConverter.toDto(blogEntity);
     }
 
     @Override
