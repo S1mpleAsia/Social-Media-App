@@ -12,6 +12,7 @@ const Login = () => {
 
   const handleSignInMode = () => {
     setSignUpMode(!signUpMode);
+    console.log("test");
   };
 
   const handleSignUpMode = () => {
